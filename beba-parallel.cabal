@@ -16,6 +16,12 @@ extra-source-files:  README.md
 executable beba-parallel
   hs-source-dirs:      src
   main-is:             Main.hs
+  other-modules:       Beba.Env 
+                       Beba.Options 
+                       Beba.Process
+                       Paths_beba_parallel
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
-                    ,  optparse-applicative
+                     , optparse-applicative
+                     , process
+  ghc-options:         -O2 -Wall -threaded

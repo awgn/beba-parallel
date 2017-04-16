@@ -2,21 +2,23 @@
 
 module Main where
 
-import Options
+import qualified Beba.Options as Beba
+import Beba.Env
+
 import Options.Applicative
 import Data.Semigroup ((<>))
+import Data.Version (showVersion)
+import qualified Paths_beba_parallel as P
 
-bebaVer :: String
-bebaVer = "0.1"
 
 main :: IO ()
 main = execParser opts >>= mainRun
     where
-       opts = info (helper <*> parseOptions)
+       opts = info (helper <*> Beba.parseOptions)
         (fullDesc <> header "beba-parallel: multi-core beba switch")
 
 
-mainRun :: BebaOptions -> IO ()
-mainRun opt@BebaOptions{..}
-  | version        = putStrLn bebaVer
-  | otherwise      = print opt
+mainRun :: Beba.Options -> IO ()
+mainRun opt@Beba.Options{..}
+  | version        = putStrLn $ showVersion P.version
+  | otherwise      = print opt >> print (pfq_socket_env opt 0)

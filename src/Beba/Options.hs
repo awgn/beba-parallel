@@ -1,10 +1,14 @@
-module Options where
+module Beba.Options
+    (
+      Options(..)
+    , parseOptions
+    ) where
 
 import Options.Applicative
 import Data.Semigroup ((<>))
 
 
-data BebaOptions = BebaOptions
+data Options = Options
     {
       controllerHost  :: String
     , controllerPort  :: Int
@@ -12,6 +16,12 @@ data BebaOptions = BebaOptions
     , baseCore        :: Int
     , basePort        :: Int
     , instances       :: Int
+
+    , envCaplen       :: Int
+    , envRxSlot       :: Int
+    , envTxSlot       :: Int
+    , envTxSync       :: Int
+
     , verbose         :: Bool
     , version         :: Bool
 
@@ -19,8 +29,8 @@ data BebaOptions = BebaOptions
 
 
 
-parseOptions :: Parser BebaOptions
-parseOptions = BebaOptions
+parseOptions :: Parser Options
+parseOptions = Options
 
      <$> strOption
             ( long "contoller-host"
@@ -56,7 +66,7 @@ parseOptions = BebaOptions
            <> metavar "PORT"
            <> showDefault
            <> value 8000
-           <> help "Frist TCP/port toward ofprotocol" )
+           <> help "First TCP/port toward ofprotocol")
 
      <*> option auto
             ( long "instance"
@@ -64,16 +74,44 @@ parseOptions = BebaOptions
            <> metavar "NUM"
            <> showDefault
            <> value 1
-           <> help "Number of ofdatapath" )
+           <> help "Number of ofdatapath")
+
+     <*> option auto
+            ( long "socket-caplen"
+           <> metavar "BYTES"
+           <> showDefault
+           <> value 1500
+           <> help "Socket environment option (PFQ_CAPLEN)")
+
+     <*> option auto
+            ( long "socket-rx-slots"
+           <> metavar "INT"
+           <> showDefault
+           <> value 4096
+           <> help "Socket environment option (PFQ_RX_SLOTS)")
+
+     <*> option auto
+            ( long "socket-tx-slots"
+           <> metavar "INT"
+           <> showDefault
+           <> value 4096
+           <> help "Socket environment option (PFQ_TX_SLOTS)")
+
+     <*> option auto
+            ( long "socket-tx-sync"
+           <> metavar "INT"
+           <> showDefault
+           <> value 256
+           <> help "Socket environment option (PFQ_TX_SYNC)")
 
      <*> switch
             ( long "verbose"
            <> short 'v'
-           <> help "Enable verbose mode (debug)" )
+           <> help "Enable verbose mode (debug)")
 
      <*> switch
             ( long "version"
            <> short 'V'
-           <> help "Print version" )
+           <> help "Print version")
 
 
