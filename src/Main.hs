@@ -55,7 +55,9 @@ mainRunSwitch opt@Beba.Options{..} = do
     forM [ 0 .. instances-1 ] $ \n -> do
         env' <- (<> pfqEnvironment n opt) <$> getEnvironment
         dpath <- openFile ("/var/log/ofdatapath.log." ++ show n) AppendMode
-        (_, _, _, d) <- launchProcess verbose $ (Beba.mkOfDataPath n opt) {std_out = UseHandle dpath, env = Just env' }
+        (_, _, _, d) <- launchProcess verbose $ (Beba.mkOfDataPath n opt) { std_out = UseHandle dpath
+                                                                          , std_err = UseHandle dpath
+                                                                          , env = Just env' }
         (_, _, _, p) <- launchProcess verbose $ Beba.mkOfProtocol n opt
         return (d,p)
 

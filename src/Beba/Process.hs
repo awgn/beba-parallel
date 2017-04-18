@@ -36,8 +36,7 @@ mkOfDataPath idx Options{..} =
               , "--verbose=ANY:console:emer"
               , "--verbose=ANY:file:emer"
             ]) {
-                 std_err = NoStream
-               , close_fds = True
+                 close_fds = True
                , delegate_ctlc = True
                }
 
