@@ -24,4 +24,5 @@ executable beba-parallel
   build-depends:       base >= 4.7 && < 5
                      , optparse-applicative
                      , process
+                     , unix
   ghc-options:         -O2 -Wall -threaded
