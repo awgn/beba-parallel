@@ -58,7 +58,7 @@ parseOptions = Options
            <> metavar "CORE"
            <> showDefault
            <> value 0
-           <> help "Index of the first core")
+           <> help "Index of the first datapath core")
 
      <*> option auto
             ( long "first-port"
@@ -66,7 +66,7 @@ parseOptions = Options
            <> metavar "PORT"
            <> showDefault
            <> value 8000
-           <> help "First TCP/port toward ofprotocol")
+           <> help "First TCP port to ofprotocol")
 
      <*> option auto
             ( long "instance"
@@ -74,31 +74,31 @@ parseOptions = Options
            <> metavar "NUM"
            <> showDefault
            <> value 1
-           <> help "Number of ofdatapath")
+           <> help "Number of ofdatapath/ofprotocol pairs")
 
      <*> option auto
-            ( long "socket-caplen"
+            ( long "pfq-caplen"
            <> metavar "BYTES"
            <> showDefault
            <> value 1500
            <> help "Socket environment option (PFQ_CAPLEN)")
 
      <*> option auto
-            ( long "socket-rx-slots"
+            ( long "pfq-rx-slots"
            <> metavar "INT"
            <> showDefault
            <> value 4096
            <> help "Socket environment option (PFQ_RX_SLOTS)")
 
      <*> option auto
-            ( long "socket-tx-slots"
+            ( long "pfq-tx-slots"
            <> metavar "INT"
            <> showDefault
            <> value 4096
            <> help "Socket environment option (PFQ_TX_SLOTS)")
 
      <*> option auto
-            ( long "socket-tx-sync"
+            ( long "pfq-tx-sync"
            <> metavar "INT"
            <> showDefault
            <> value 256

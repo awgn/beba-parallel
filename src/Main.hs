@@ -25,7 +25,7 @@ main :: IO ()
 main = execParser opts >>= mainRun
     where
        opts = info (helper <*> Beba.parseOptions)
-        (fullDesc <> header "beba-parallel: multi-core beba switch")
+        (fullDesc <> header "beba-parallel: multi-core BEBA switch (github.com/beba-eu/beba-switch)")
 
 
 mainRun :: Beba.Options -> IO ()
