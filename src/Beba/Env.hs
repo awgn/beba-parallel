@@ -14,7 +14,7 @@ pfqEnvironment n Options{..} =
       , ("PFQ_TX_SLOTS"     , show envTxSlot)
       , ("PFQ_TX_SYNC"      , show envTxSync)
       , ("PFQ_TX_HW_QUEUE"  , show n)
-    ] <> map pfqDevGroup interface
+    ] <> (pfqDevGroup <$> interface)
 
 
 pfqDevGroup :: String -> (String, String)
