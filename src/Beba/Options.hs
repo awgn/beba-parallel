@@ -21,6 +21,7 @@ data Options = Options
     , envRxSlot       :: Int
     , envTxSlot       :: Int
     , envTxSync       :: Int
+    , envFanout       :: Maybe String
 
     , verbose         :: Bool
     , version         :: Bool
@@ -103,6 +104,12 @@ parseOptions = Options
            <> showDefault
            <> value 256
            <> help "Socket environment option (PFQ_TX_SYNC)")
+
+     <*> optional (strOption
+            ( long "pfq-fanout"
+           <> metavar "PROG"
+           <> value ""
+           <> help "Socket environment option (PFQ_LANG)"))
 
      <*> switch
             ( long "verbose"

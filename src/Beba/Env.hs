@@ -15,6 +15,7 @@ pfqEnvironment n Options{..} =
       , ("PFQ_TX_SYNC"      , show envTxSync)
       , ("PFQ_TX_HW_QUEUE"  , show n)
     ] <> (pfqDevGroup <$> interface)
+      <> (pfqFanout n envFanout)
 
 
 pfqDevGroup :: String -> (String, String)
@@ -22,3 +23,8 @@ pfqDevGroup xs
   | "eth" `isPrefixOf` xs = ("PFQ_GROUP_" <> xs, drop 3 xs)
   | otherwise = ("PFQ_GROUP_" <> xs, "63")
 
+
+pfqFanout :: Int -> Maybe String -> [(String, String)]
+pfqFanout n steer | 
+    n == 0, Just xs <- steer = [("PFQ_LANG", xs)]
+pfqFanout _ _ = []
