@@ -108,7 +108,6 @@ parseOptions = Options
      <*> optional (strOption
             ( long "pfq-fanout"
            <> metavar "PROG"
-           <> value ""
            <> help "Socket environment option (PFQ_LANG)"))
 
      <*> switch
