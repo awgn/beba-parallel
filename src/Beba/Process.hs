@@ -20,6 +20,7 @@ mkOfProtocol idx Options{..} =
             [ "tcp:127.0.0.1:" ++ show (basePort + idx)
             , "tcp:" ++ controllerHost ++ ":" ++ show controllerPort
             , "--log-file=/var/log/ofprotocol.log." ++ show idx
+            , "--verbose=ANY:ANY:info"
             , "--verbose=ANY:console:emer"
             ]) {
                  close_fds = True
@@ -33,8 +34,7 @@ mkOfDataPath idx Options{..} =
               , "--no-slicing"
               , "-d", datapath_id idx
               , "--interfaces=" ++ intercalate "," interface
-              , "--verbose=ANY:console:emer"
-              , "--verbose=ANY:file:emer"
+              , "--verbose=ANY:ANY:emer"
             ]) {
                  close_fds = True
                , delegate_ctlc = True
