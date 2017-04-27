@@ -16,6 +16,7 @@ pfqEnvironment n Options{..} =
       , ("PFQ_TX_HW_QUEUE"  , show n)
     ] <> (pfqDevGroup <$> interface)
       <> (pfqFanout n envFanout)
+      <> (pfqHugePages envHugePages)
 
 
 pfqDevGroup :: String -> (String, String)
@@ -28,3 +29,8 @@ pfqFanout :: Int -> Maybe String -> [(String, String)]
 pfqFanout n steer | 
     n == 0, Just xs <- steer = [("PFQ_LANG", xs)]
 pfqFanout _ _ = []
+
+
+pfqHugePages :: Maybe String -> [(String, String)]
+pfqHugePages hp | Just xs <- hp = [("PFQ_HUGEPAGES", xs)]
+pfqHugePages _ = []

@@ -22,6 +22,7 @@ data Options = Options
     , envTxSlot       :: Int
     , envTxSync       :: Int
     , envFanout       :: Maybe String
+    , envHugePages    :: Maybe String
 
     , verbose         :: Bool
     , version         :: Bool
@@ -109,6 +110,11 @@ parseOptions = Options
             ( long "pfq-fanout"
            <> metavar "PROG"
            <> help "Socket environment option (PFQ_LANG)"))
+
+     <*> optional (strOption
+            ( long "pfq-hugepages"
+           <> metavar "VALUE"
+           <> help "Socket environment option (PFQ_HUGEPAGES)"))
 
      <*> switch
             ( long "verbose"
