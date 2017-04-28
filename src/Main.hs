@@ -10,6 +10,7 @@ import Options.Applicative
 
 import Data.Semigroup ((<>))
 import Data.Version (showVersion)
+import Data.Maybe
 import qualified Paths_beba_parallel as P
 
 import System.Posix.Signals
@@ -18,6 +19,7 @@ import System.Process
 import System.IO
 
 import Control.Monad (forM, when)
+import Control.Concurrent (threadDelay)
 
 import Beba.Env
 
@@ -36,6 +38,12 @@ mainRun opt@Beba.Options{..}
       _ <- installHandler sigTERM (Catch $ routeSignal "TERM" hld) Nothing
       _ <- installHandler sigINT  (Catch $ routeSignal "INT"  hld) Nothing
       _ <- installHandler sigHUP  (Catch $ routeSignal "HUP"  hld) Nothing
+
+      threadDelay 5000000
+      anyStopped hld >>= \err -> 
+        when err $  
+            putStrLn "An error occurred: Exit forced!" >> terminateAll hld
+
       mainWait hld
 
 
@@ -43,6 +51,17 @@ routeSignal :: String -> [(ProcessHandle, ProcessHandle)] -> IO ()
 routeSignal n hdl = do
     putStrLn $ "Signal " ++ n ++ " catched..."
     mapM_ (\(a,b) -> terminateProcess a >> terminateProcess b) hdl
+
+
+terminateAll :: [(ProcessHandle, ProcessHandle)] -> IO ()
+terminateAll = mapM_ (\(d,p) -> terminateProcess d >> terminateProcess p)
+
+anyStopped :: [(ProcessHandle, ProcessHandle)] -> IO Bool
+anyStopped xs =
+   or <$> (mapM (\(p,d) ->  do
+                    pe <- isJust <$> getProcessExitCode p
+                    pd <- isJust <$> getProcessExitCode d
+                    return (pe || pd)) xs)
 
 
 mainWait :: [(ProcessHandle, ProcessHandle)] -> IO ()
@@ -55,10 +74,17 @@ mainRunSwitch opt@Beba.Options{..} = do
     forM [ 0 .. instances-1 ] $ \n -> do
         env' <- (<> pfqEnvironment n opt) <$> getEnvironment
         dpath <- openFile ("/var/log/ofdatapath.log." ++ show n) AppendMode
+
         (_, _, _, d) <- launchProcess verbose $ (Beba.mkOfDataPath n opt) { std_out = UseHandle dpath
                                                                           , std_err = UseHandle dpath
                                                                           , env = Just env' }
         (_, _, _, p) <- launchProcess verbose $ Beba.mkOfProtocol n opt
+      
+        pe <- isJust <$> getProcessExitCode p
+        pd <- isJust <$> getProcessExitCode d
+        threadDelay 500000
+        when (pe || pd) $
+            putStrLn "Error launching ofdata/protocol..."
         return (d,p)
 
 
