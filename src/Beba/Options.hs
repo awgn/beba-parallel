@@ -15,7 +15,7 @@ data Options = Options
     , interface       :: [String]
     , baseCore        :: Int
     , basePort        :: Int
-    , instances       :: Int
+    , instances       :: Maybe Integer
 
     , ofDataPath      :: FilePath
     , ofProtocol      :: FilePath
@@ -73,13 +73,12 @@ parseOptions = Options
            <> value 8000
            <> help "First TCP port to ofprotocol")
 
-     <*> option auto
+     <*> optional (option auto
             ( long "instance"
            <> short 'j'
            <> metavar "NUM"
            <> showDefault
-           <> value 1
-           <> help "Number of ofdatapath/ofprotocol pairs")
+           <> help "Number of ofdatapath/ofprotocol pairs"))
 
      <*> strOption
             ( long "ofdatapath"

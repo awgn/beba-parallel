@@ -70,8 +70,9 @@ mainWait = mapM_ (\(a,b) -> waitForProcess a >> waitForProcess b)
 
 mainRunSwitch :: Beba.Options -> IO [(ProcessHandle, ProcessHandle)]
 mainRunSwitch opt@Beba.Options{..} = do
-    putStrLn $ "Launching " ++ show instances ++ " instances ofdatapath/ofprotocol..."
-    forM [ 0 .. instances-1 ] $ \n -> do
+    let instances' = fromIntegral $ fromMaybe 1 instances 
+    putStrLn $ "Launching " ++ show instances' ++ " instances ofdatapath/ofprotocol..."
+    forM [ 0 .. instances'-1 ] $ \n -> do
         env' <- (<> pfqEnvironment n opt) <$> getEnvironment
         dpath <- openFile ("/var/log/ofdatapath.log." ++ show n) AppendMode
 

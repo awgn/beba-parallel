@@ -28,18 +28,17 @@ mkOfProtocol idx Options{..} =
                }
 
 mkOfDataPath idx Options{..} =
-    (proc ofDataPath
+    (proc ofDataPath $
             [   "ptcp:" ++ show (basePort + idx)
-              , "-C", show (baseCore + idx)
               , "--no-slicing"
               , "-d", datapath_id idx
               , "--interfaces=" ++ intercalate "," interface
               , "--verbose=ANY:ANY:emer"
-            ]) {
+            ] ++ ( maybe [] (\_ -> ["-C", show (baseCore + idx)]) instances)
+            ) {
                  close_fds = True
                , delegate_ctlc = True
                }
-
 
 datapath_id :: Int -> String
 datapath_id n = let h = showHex (n+1) "" in
