@@ -16,7 +16,7 @@ mkOfDataPath ::  Int -> Options ->  CreateProcess
 
 
 mkOfProtocol idx Options{..} =
-    (proc "/usr/local/bin/ofprotocol"
+    (proc ofProtocol
             [ "tcp:127.0.0.1:" ++ show (basePort + idx)
             , "tcp:" ++ controllerHost ++ ":" ++ show controllerPort
             , "--log-file=/var/log/ofprotocol.log." ++ show idx
@@ -28,7 +28,7 @@ mkOfProtocol idx Options{..} =
                }
 
 mkOfDataPath idx Options{..} =
-    (proc "/usr/local/bin/ofdatapath"
+    (proc ofDataPath
             [   "ptcp:" ++ show (basePort + idx)
               , "-C", show (baseCore + idx)
               , "--no-slicing"

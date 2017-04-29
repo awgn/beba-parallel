@@ -17,6 +17,9 @@ data Options = Options
     , basePort        :: Int
     , instances       :: Int
 
+    , ofDataPath      :: FilePath
+    , ofProtocol      :: FilePath
+
     , envCaplen       :: Int
     , envRxSlot       :: Int
     , envTxSlot       :: Int
@@ -77,6 +80,18 @@ parseOptions = Options
            <> showDefault
            <> value 1
            <> help "Number of ofdatapath/ofprotocol pairs")
+
+     <*> strOption
+            ( long "ofdatapath"
+           <> metavar "EXE"
+           <> value "/usr/local/bin/ofdatapath"
+           <> help "Specify the OF datapath binary")
+
+     <*> strOption
+            ( long "ofprotocol"
+           <> metavar "EXE"
+           <> value "/usr/local/bin/ofprotocol"
+           <> help "Specify the OF protocol binary")
 
      <*> option auto
             ( long "pfq-caplen"
